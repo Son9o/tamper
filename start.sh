@@ -14,7 +14,7 @@ for ((i=0;i<=${RecsGetAmount};i++))  ;do
 	RecsUserContentHash=$(echo "$FileJSON" | grep -w "/results/${i}/user/content_hash" | cut -d"\"" -f2)
 	RecsUser_id=$(echo "$FileJSON" | grep -w "/results/${i}/user/_id" | cut -d"\"" -f2)
 	RecsUser_idArray+=("RecsUser_id")
-	RecsUserBio=$(echo "$FileJSON" | grep -w "/results/${i}/user/bio" | cut -d"\"" -f2)
+	RecsUserBio=$(echo "$FileJSON" | grep -w "/results/${i}/user/bio" | cut -d$'\t' -f2- | sed -e "s/'/' \"'\" '/g")
 	RecsUserBirthDate=$(echo "$FileJSON" | grep -w "/results/${i}/user/birth_date" | cut -d"\"" -f2)
 	RecsUserName=$(echo "$FileJSON" | grep -w "/results/${i}/user/name" | cut -d"\"" -f2)
 	RecsUserPingTime=$(echo "$FileJSON" | grep -w "/results/${i}/user/ping_time" | cut -d"\"" -f2)
@@ -58,6 +58,6 @@ for ((i=0;i<=${RecsGetAmount};i++))  ;do
 "$RecsUserPhto5url"
 "$RecsUserPhoto6id"
 "$RecsUserPhotourl""
-$MyInsert <<< "INSERT INTO recs (type,distance_mi,content_hash,user_id,bio,birth_date,name,ping_time,s_number,photo0_id,photo0_url,photo1_id,photo1_url,photo2_id,photo2_url,photo3_id,photo3_url,photo4_id,photo4_url,photo5_id,photo5_url,photo6_id,photo6_url) VALUES (\"$RecsUserType\",\"$RecsUserDistanceMi\",\"$RecsUserContentHash\",\"$RecsUser_id\",\"$RecsUserBio\",\"$RecsUserBirthDate\",\"$RecsUserName\",\"$RecsUserPingTime\",\"$RecsUserSNumber\",\"$RecsUserPhoto0id\",\"$RecsUserPhoto0url\",\"$RecsUserPhoto1id\",\"$RecsUserPhoto1url\",\"$RecsUserPhoto2id\",\"$RecsUserPhoto2url\",\"$RecsUserPhoto3id\",\"$RecsUserPhoto3url\",\"$RecsUserPhoto4id\",\"$RecsUserPhoto4url\",\"$RecsUserPhoto5id\",\"$RecsUserPhto5url\",\"$RecsUserPhoto6id\",\"$RecsUserPhotourl\");"
+$MyInsert <<< "INSERT INTO recs (type,distance_mi,content_hash,user_id,bio,birth_date,name,ping_time,s_number,photo0_id,photo0_url,photo1_id,photo1_url,photo2_id,photo2_url,photo3_id,photo3_url,photo4_id,photo4_url,photo5_id,photo5_url,photo6_id,photo6_url) VALUES (\"$RecsUserType\",\"$RecsUserDistanceMi\",\"$RecsUserContentHash\",\"$RecsUser_id\",'$RecsUserBio',\"$RecsUserBirthDate\",\"$RecsUserName\",\"$RecsUserPingTime\",\"$RecsUserSNumber\",\"$RecsUserPhoto0id\",\"$RecsUserPhoto0url\",\"$RecsUserPhoto1id\",\"$RecsUserPhoto1url\",\"$RecsUserPhoto2id\",\"$RecsUserPhoto2url\",\"$RecsUserPhoto3id\",\"$RecsUserPhoto3url\",\"$RecsUserPhoto4id\",\"$RecsUserPhoto4url\",\"$RecsUserPhoto5id\",\"$RecsUserPhto5url\",\"$RecsUserPhoto6id\",\"$RecsUserPhotourl\");"
 done
 #@x=8np?U++?zZHLX
