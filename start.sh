@@ -2,18 +2,20 @@
 source /usr/local/lib/bash/json.bash
 source settings.sh
 MyInsert="mysql -h ${MysqlHost} -u ${MysqlUser} -p${MysqlPassword} -N ${MysqlDb}"
-XAuthToken="0417ec3b-af9c-40f1-8efb-4e73e45bd1ee"
+XAuthToken="90635749-0c86-4941-8f07-d01276ab675c"
+Pass="curl --compressed  "https://api.gotinder.com/pass/5846770689c7f8ab55660eaf?photoId=7961acac-8e19-41ff-a33d-3a61cb4db944&content_hash=GAlhzwtLdsG6ua3t4cNAUYJTOwiEZSvPsgRtLDt92TamC5Z&s_number=263124976" -H "platform: android" -H "User-Agent: Tinder Android Version 6.4.1" -H "os-version: 22" -H "Accept-Language: en" -H "app-version: 1935" -H "Host: api.gotinder.com" -H "Connection: Keep-Alive" -H "Accept-Encoding: gzip" -H "X-Auth-Token:  ${XAuthToken}""
 #File=$(curl --compressed "https://api.gotinder.com/recs/core?locale=en" -H "platform: android" -H "User-Agent: Tinder Android Version 6.4.1" -H "os-version: 22" -H "Accept-Language: en" -H "app-version: 1935" -H "Host: api.gotinder.com" -H "Connection: Keep-Alive" -H "Accept-Encoding: gzip" -H "X-Auth-Token: ${XAuthToken}")
-File=$(cat 3.dat)
+File=$(cat 5.dat)
 FileJSON=$(echo "$File" | JSON.load)
 RecsGetAmount=$(echo "${FileJSON}" | cut -d"/" -f3 | sort -nr | head -1)
+##Disembowel the load and push into DB
 typeset -i i RecsGetAmount
 for ((i=0;i<=${RecsGetAmount};i++))  ;do
 	RecsUserType=$(echo "$FileJSON" | grep -w "/results/${i}/type" | cut -d"\"" -f2)
 	RecsUserDistanceMi=$(echo "$FileJSON" | grep -w "/results/${i}/user/distance_mi" | awk '{print $2}')
 	RecsUserContentHash=$(echo "$FileJSON" | grep -w "/results/${i}/user/content_hash" | cut -d"\"" -f2)
 	RecsUser_id=$(echo "$FileJSON" | grep -w "/results/${i}/user/_id" | cut -d"\"" -f2)
-	RecsUser_idArray+=("RecsUser_id")
+	RecsUser_idArray+=("${RecsUser_id}") # This Line adds user ID to araay to operate on later (pass/like/super/whatnot)
 	RecsUserBio=$(echo "$FileJSON" | grep -w "/results/${i}/user/bio" | cut -d$'\t' -f2- | sed -e "s/'/' \"'\" '/g")
 	RecsUserBirthDate=$(echo "$FileJSON" | grep -w "/results/${i}/user/birth_date" | cut -d"\"" -f2)
 	RecsUserName=$(echo "$FileJSON" | grep -w "/results/${i}/user/name" | cut -d"\"" -f2)
@@ -60,4 +62,9 @@ for ((i=0;i<=${RecsGetAmount};i++))  ;do
 "$RecsUserPhotourl""
 $MyInsert <<< "INSERT INTO recs (type,distance_mi,content_hash,user_id,bio,birth_date,name,ping_time,s_number,photo0_id,photo0_url,photo1_id,photo1_url,photo2_id,photo2_url,photo3_id,photo3_url,photo4_id,photo4_url,photo5_id,photo5_url,photo6_id,photo6_url) VALUES (\"$RecsUserType\",\"$RecsUserDistanceMi\",\"$RecsUserContentHash\",\"$RecsUser_id\",'$RecsUserBio',\"$RecsUserBirthDate\",\"$RecsUserName\",\"$RecsUserPingTime\",\"$RecsUserSNumber\",\"$RecsUserPhoto0id\",\"$RecsUserPhoto0url\",\"$RecsUserPhoto1id\",\"$RecsUserPhoto1url\",\"$RecsUserPhoto2id\",\"$RecsUserPhoto2url\",\"$RecsUserPhoto3id\",\"$RecsUserPhoto3url\",\"$RecsUserPhoto4id\",\"$RecsUserPhoto4url\",\"$RecsUserPhoto5id\",\"$RecsUserPhto5url\",\"$RecsUserPhoto6id\",\"$RecsUserPhotourl\");"
 done
+#	curl --compressed  "https://api.gotinder.com/pass/${RecsUser_id}?photoId=${RecsUserPhoto0id}&content_hash=${RecsUserContentHash}&s_number=${RecsUserSNumber}" -H "platform: android" -H "User-Agent: Tinder Android Version 6.4.1" -H "os-version: 22" -H "Accept-Language: en" -H "app-version: 1935" -H "Host: api.gotinder.com" -H "Connection: Keep-Alive" -H "Accept-Encoding: gzip" -H "X-Auth-Token:  ${XAuthToken}""
+for each in ${RecsUser_idArray[*]} ;do
+	echo $each
+done
+unset RecsUser_idArray
 #@x=8np?U++?zZHLX
