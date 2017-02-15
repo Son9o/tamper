@@ -64,7 +64,12 @@ $MyInsert <<< "INSERT INTO recs (type,distance_mi,content_hash,user_id,bio,birth
 done
 #	curl --compressed  "https://api.gotinder.com/pass/${RecsUser_id}?photoId=${RecsUserPhoto0id}&content_hash=${RecsUserContentHash}&s_number=${RecsUserSNumber}" -H "platform: android" -H "User-Agent: Tinder Android Version 6.4.1" -H "os-version: 22" -H "Accept-Language: en" -H "app-version: 1935" -H "Host: api.gotinder.com" -H "Connection: Keep-Alive" -H "Accept-Encoding: gzip" -H "X-Auth-Token:  ${XAuthToken}""
 for each in ${RecsUser_idArray[*]} ;do
+	sleep $(shuf -i 1-3 -n 1)
+	echo liking that sweathart
 	echo $each
 done
 unset RecsUser_idArray
 #@x=8np?U++?zZHLX
+#curl -v --compressed -X POST "https://api.gotinder.com/v2/auth" -H "app-session: 248b0b770f30b1f747bbbe6ad0c76194c4f4ba58" -H "User-Agent: Tinder Android Version 6.8.1" -H "os-version: 23" -H "app-version: 2021" -H "platform: android" -H "Accept-Language: en" -H "Content-Type: application/json; charset=UTF-8" -H "Host: api.gotinder.com" -H "Connection: Keep-Alive" -H "Accept-Encoding: gzip" --data '{"token":"EAAGm0PX4ZCpsBACSSPW3Paq8NPsRk3FUqgjGPnmJ20Bjxl4PD1x60hyAw6CSTRCiX4Epn5QBe0j0kdX2iwjOEPogfjzeTYHBAZBkCM8qqTBSepXVpad19CDMNnFjcBzhMLya6hMc5wuh0H3WRkbZB5RoC9sx9AWrVbodYKPoZAkADiaaMA9MsBnuupWZA0I7KEPZAPMGxtqFiLQK3e2oNC","id":"734262360"}'
+
+#curl -v --compressed "https://api.gotinder.com/recs/core?locale=en" -H "User-Agent: Tinder Android Version 6.8.1" -H "os-version: 23" -H "app-version: 2021" -H "platform: android" -H "Accept-Language: en" -H "Content-Type: application/json; charset=UTF-8" -H "Host: api.gotinder.com" -H "Connection: Keep-Alive" -H "Accept-Encoding: gzip" -H "X-Auth-Token: 02031761-4f38-4a8c-a892-540df1b07aae"
