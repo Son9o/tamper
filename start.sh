@@ -3,17 +3,50 @@ source /usr/local/lib/bash/json.bash
 source settings.sh
 MyInsert="mysql -h ${MysqlHost} -u ${MysqlUser} -p${MysqlPassword} -N ${MysqlDb}"
 XAuthToken="90635749-0c86-4941-8f07-d01276ab675c"
-Pass='curl --compressed  "https://api.gotinder.com/pass/5846770689c7f8ab55660eaf?photoId=7961acac-8e19-41ff-a33d-3a61cb4db944&content_hash=GAlhzwtLdsG6ua3t4cNAUYJTOwiEZSvPsgRtLDt92TamC5Z&s_number=263124976" -H "platform: android" -H "User-Agent: Tinder Android Version 6.4.1" -H "os-version: 22" -H "Accept-Language: en" -H "app-version: 1935" -H "Host: api.gotinder.com" -H "Connection: Keep-Alive" -H "Accept-Encoding: gzip" -H "X-Auth-Token:  ${XAuthToken}"'
+XAuthToken=$(cat xauthtoken.recent)
+HostHeader="api.gotinder.com"
+AppVersion="2021"
+OSversion="23"
+UserAgent="Tinder Android Version 6.8.1"
+RetryAttempts=2
+RetryAttemptsDelaySeconds=5
+RandomSessionID=$(echo -n "$(date +%s)" | openssl dgst -sha1 -hmac "salted caraeml"  | awk '{print $2}')
+
+RecsCall () 
+{
+	RecsResponse=$(curl --compressed "https://api.gotinder.com/recs/core?locale=en" -H "platform: android" -H "User-Agent: ${UserAgent}" -H "os-version: ${OSversion}" -H "Accept-Language: en" -H "Content-Type: application/json; charset=UTF-8" -H "app-version: ${AppVersion}" -H "Host: ${HostHeader}" -H "Connection: Keep-Alive" -H "Accept-Encoding: gzip" -H "X-Auth-Token: ${XAuthToken}")
+}
+
+GetXAuthToken ()
+{
+	AuthResponse=$(curl --compressed -X POST "https://api.gotinder.com/v2/auth" -H "app-session: $(echo -n "$(date +%s)" | openssl dgst -sha1 -hmac "salted caraeml"  | awk '{print $2}')" -H "User-Agent: ${UserAgent}" -H "os-version: ${OSversion}" -H "app-version: ${AppVersion}" -H "platform: android" -H "Accept-Language: en" -H "Content-Type: application/json; charset=UTF-8" -H "Host: ${HostHeader}" -H "Connection: Keep-Alive" -H "Accept-Encoding: gzip" --data '{"token":"EAAGm0PX4ZCpsBACSSPW3Paq8NPsRk3FUqgjGPnmJ20Bjxl4PD1x60hyAw6CSTRCiX4Epn5QBe0j0kdX2iwjOEPogfjzeTYHBAZBkCM8qqTBSepXVpad19CDMNnFjcBzhMLya6hMc5wuh0H3WRkbZB5RoC9sx9AWrVbodYKPoZAkADiaaMA9MsBnuupWZA0I7KEPZAPMGxtqFiLQK3e2oNC","id":"734262360"}')
+	if [ "${AuthResponse:0:22}" != '{"meta":{"status":200}' ] ;then
+		echo "$(date)Server returned $AuthResponse" >> tamper.log
+		exit 1
+	else 
+		XAuthToken=$(echo "$AuthResponse" | JSON.load | grep -m1 api | cut -d"\"" -f2)
+		echo "$XAuthToken" > xauthtoken.recent
+	fi
+}
+
+RecsCall
+if [ "$RecsResponse" == '{"status":401,"error":""}' ] ;then
+	echo "$(date) 401 attempt re-authentication" >> tamper.log
+	RetryCounter=0
+	GetXAuthToken	
+fi
+#Pass='curl --compressed  "https://api.gotinder.com/pass/5846770689c7f8ab55660eaf?photoId=7961acac-8e19-41ff-a33d-3a61cb4db944&content_hash=GAlhzwtLdsG6ua3t4cNAUYJTOwiEZSvPsgRtLDt92TamC5Z&s_number=263124976" -H "platform: android" -H "User-Agent: Tinder Android Version 6.4.1" -H "os-version: 22" -H "Accept-Language: en" -H "app-version: 1935" -H "Host: api.gotinder.com" -H "Connection: Keep-Alive" -H "Accept-Encoding: gzip" -H "X-Auth-Token:  ${XAuthToken}"'
+#curl -v --compressed "https://api.gotinder.com/recs/core?locale=en" -H "User-Agent: Tinder Android Version 6.8.1" -H "os-version: 23" -H "app-version: 2021" -H "platform: android" -H "Accept-Language: en" -H "Content-Type: application/json; charset=UTF-8" -H "Host: api.gotinder.com" -H "Connection: Keep-Alive" -H "Accept-Encoding: gzip" -H "X-Auth-Token: 02031761-4f38-4a8c-a892-540df1b07aae"
 #File=$(curl --compressed "https://api.gotinder.com/recs/core?locale=en" -H "platform: android" -H "User-Agent: Tinder Android Version 6.4.1" -H "os-version: 22" -H "Accept-Language: en" -H "app-version: 1935" -H "Host: api.gotinder.com" -H "Connection: Keep-Alive" -H "Accept-Encoding: gzip" -H "X-Auth-Token: ${XAuthToken}")
 ##File means requests response  unparsed
-File=$(cat 5.dat)
-RecsResponse="${File:0:23}"
+#File=$(cat 5.dat)
+#RecsResponse="${File:0:23}"
 ##Error handling if unknonw response stop to avoid ban, perhaps impelemnt length check
-if [ "$RecsResponse" != '{"status":200,"results"' ] ;then
-	echo "Unknown reponse, exiting"
+if [ "${RecsResponse:0:23}" != '{"status":200,"results"' ] ;then
+	echo "$(date) Unknown reponse, exiting" >> tamper.log
 	exit 1
 fi
-FileJSON=$(echo "$File" | JSON.load)
+FileJSON=$(echo "${RecsResponse}" | JSON.load)
 ##Get number of profiles sent in recommendations
 RecsGetAmount=$(echo "${FileJSON}" | cut -d"/" -f3 | sort -nr | head -1)
 ##Disembowel the load and push into DB
@@ -44,7 +77,7 @@ for ((i=0;i<=${RecsGetAmount};i++))  ;do
 	RecsUserPhto5url=$(echo "$FileJSON" | grep  -w "/results/${i}/user/photos/5/url" | cut -d"\"" -f2)
 #	RecsUserPhoto6id=$(echo "$FileJSON" | grep  -w "/results/${i}/user/photos/6/id" | cut -d"\"" -f2)
 #	RecsUserPhotourl=$(echo "$FileJSON" | grep  -w "/results/${i}/user/photos/6/url" | cut -d"\"" -f2)	
-	RecsUserGemder=$(echo  "$FileJSON" | grep -w "/results/${i}/user/gender" | cut -d"\"" -f2)
+	RecsUserGender=$(echo "$FileJSON" | grep -w "/results/${i}/user/gender" |  awk '{print $2}')
 
 	echo $i
 	echo -e "
@@ -69,8 +102,9 @@ for ((i=0;i<=${RecsGetAmount};i++))  ;do
 "$RecsUserPhoto4url"
 "$RecsUserPhoto5id" 
 "$RecsUserPhto5url"
+"$RecsUserGender""
 
-$MyInsert <<< "INSERT INTO recs (type,distance_mi,content_hash,user_id,bio,birth_date,name,ping_time,s_number,photo0_id,photo0_url,photo1_id,photo1_url,photo2_id,photo2_url,photo3_id,photo3_url,photo4_id,photo4_url,photo5_id,photo5_url) VALUES (\"$RecsUserType\",\"$RecsUserDistanceMi\",\"$RecsUserContentHash\",\"$RecsUser_id\",'$RecsUserBio',\"$RecsUserBirthDate\",\"$RecsUserName\",\"$RecsUserPingTime\",\"$RecsUserSNumber\",\"$RecsUserPhoto0id\",\"$RecsUserPhoto0url\",\"$RecsUserPhoto1id\",\"$RecsUserPhoto1url\",\"$RecsUserPhoto2id\",\"$RecsUserPhoto2url\",\"$RecsUserPhoto3id\",\"$RecsUserPhoto3url\",\"$RecsUserPhoto4id\",\"$RecsUserPhoto4url\",\"$RecsUserPhoto5id\",\"$RecsUserPhto5url\");"
+$MyInsert <<< "INSERT INTO recs (type,distance_mi,content_hash,user_id,bio,birth_date,name,ping_time,s_number,photo0_id,photo0_url,photo1_id,photo1_url,photo2_id,photo2_url,photo3_id,photo3_url,photo4_id,photo4_url,photo5_id,photo5_url,gender) VALUES (\"$RecsUserType\",\"$RecsUserDistanceMi\",\"$RecsUserContentHash\",\"$RecsUser_id\",'$RecsUserBio',\"$RecsUserBirthDate\",\"$RecsUserName\",\"$RecsUserPingTime\",\"$RecsUserSNumber\",\"$RecsUserPhoto0id\",\"$RecsUserPhoto0url\",\"$RecsUserPhoto1id\",\"$RecsUserPhoto1url\",\"$RecsUserPhoto2id\",\"$RecsUserPhoto2url\",\"$RecsUserPhoto3id\",\"$RecsUserPhoto3url\",\"$RecsUserPhoto4id\",\"$RecsUserPhoto4url\",\"$RecsUserPhoto5id\",\"$RecsUserPhto5url\",\"$RecsUserGender\");"
 done
 #	curl --compressed  "https://api.gotinder.com/pass/${RecsUser_id}?photoId=${RecsUserPhoto0id}&content_hash=${RecsUserContentHash}&s_number=${RecsUserSNumber}" -H "platform: android" -H "User-Agent: Tinder Android Version 6.4.1" -H "os-version: 22" -H "Accept-Language: en" -H "app-version: 1935" -H "Host: api.gotinder.com" -H "Connection: Keep-Alive" -H "Accept-Encoding: gzip" -H "X-Auth-Token:  ${XAuthToken}""
 exit 1
