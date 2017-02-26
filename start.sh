@@ -27,7 +27,7 @@ RecsCall ()
 		GetXAuthToken	
 		RecsCall
 	elif [ "${RecsResponse:0:23}" != '{"status":200,"results"' ] ;then
-		echo "$(date) Unknown reponse, exiting" >> tamper.log
+		echo "$(date) Unknown reponse: ${RecsResponse}, exiting" >> tamper.log
 		exit 1
 	fi
 }
@@ -99,11 +99,39 @@ for ((i=0;i<=${RecsGetAmount};i++))  ;do
 	RecsUserPhoto4id=$(echo "$FileJSON" | grep  -w "/results/${i}/user/photos/4/id" | cut -d"\"" -f2)
 	RecsUserPhoto4url=$(echo "$FileJSON" | grep  -w "/results/${i}/user/photos/4/url" | cut -d"\"" -f2)
 	RecsUserPhoto5id=$(echo "$FileJSON" | grep  -w "/results/${i}/user/photos/5/id" | cut -d"\"" -f2)
-	RecsUserPhto5url=$(echo "$FileJSON" | grep  -w "/results/${i}/user/photos/5/url" | cut -d"\"" -f2)
+	RecsUserPhoto5url=$(echo "$FileJSON" | grep  -w "/results/${i}/user/photos/5/url" | cut -d"\"" -f2)
 #	RecsUserPhoto6id=$(echo "$FileJSON" | grep  -w "/results/${i}/user/photos/6/id" | cut -d"\"" -f2)
 #	RecsUserPhotourl=$(echo "$FileJSON" | grep  -w "/results/${i}/user/photos/6/url" | cut -d"\"" -f2)	
 	RecsUserGender=$(echo "$FileJSON" | grep -w "/results/${i}/user/gender" |  awk '{print $2}')
 
+	##Redeclaring variables
+	declare "RecsUser${i}Type=${RecsUserType}"
+	declare "RecsUser${i}DistanceMi=${RecsUserDistanceMi}"
+	declare "RecsUser${i}ContentHash=${RecsUserContentHash}"
+	declare "RecsUser${i}_id=${RecsUser_id}"
+	declare "RecsUser${i}Bio=${RecsUserBio}"
+	declare "RecsUser${i}BirthDate=${RecsUserBirthDate}"
+	declare "RecsUser${i}Name=${RecsUserName}"
+	declare "RecsUser${i}PingTime=${RecsUserPingTime}"
+	declare "RecsUser${i}SNumber=${RecsUserSNumber}"
+	declare "RecsUser${i}Photo0id=${RecsUserPhoto0id}"
+	declare "RecsUser${i}Photo0url=${RecsUserPhoto0url}"
+	declare "RecsUser${i}Photo1id=${RecsUserPhoto1id}"
+	declare "RecsUser${i}Photo1url=${RecsUserPhoto1url}"
+	declare "RecsUser${i}Photo2id=${RecsUserPhoto2id}"
+	declare "RecsUser${i}Photo2url=${RecsUserPhoto2url}"
+	declare "RecsUser${i}Photo3id=${RecsUserPhoto3id}"
+	declare "RecsUser${i}Photo3url=${RecsUserPhoto3url}"
+	declare "RecsUser${i}Photo4id=${RecsUserPhoto4id}"
+	declare "RecsUser${i}Photo4url=${RecsUserPhoto4url}"
+	declare "RecsUser${i}Photo5id=${RecsUserPhoto5id}"
+	declare "RecsUser${i}Photo5url=${RecsUserPhoto5url}"
+	declare "RecsUser${i}Gender=${RecsUserGender}"
+
+	LikeUserResponse=$(curl -v --compressed "https://api.gotinder.com/like/${RecsUser_id}?photoId=${RecsUserPhoto0id}&content_hash=${RecsUserContentHash}&s_number=${RecsUserSNumber}" -H "platform: android" -H "User-Agent:  ${UserAgent}" -H "os-version: ${OSversion}" -H "Accept-Language: en" -H "app-version: ${AppVersion}" -H "Host: api.gotinder.com" -H "Connection: Keep-Alive" -H "Accept-Encoding: gzip" -H "X-Auth-Token: ${XAuthToken}" > likeresponse.txt)
+	if [ "${LikeUserResponse:0:9}" != '{"match":' ] ;then
+		echo "$(date)Server returned $AuthResponse" >> tamper.log
+		exit 1
 #Echo recs array
 	if [[ ${DEBUG} == 1 ]] ;then
 		echo "dumping converstion per id"
@@ -129,18 +157,18 @@ for ((i=0;i<=${RecsGetAmount};i++))  ;do
 "$RecsUserPhoto4id"
 "$RecsUserPhoto4url"
 "$RecsUserPhoto5id" 
-"$RecsUserPhto5url"
+"$RecsUserPhoto5url"
 "$RecsUserGender""
 	fi
 ##DB insert
-$MyInsert <<< "INSERT INTO recs (type,distance_mi,content_hash,user_id,bio,birth_date,name,ping_time,s_number,photo0_id,photo0_url,photo1_id,photo1_url,photo2_id,photo2_url,photo3_id,photo3_url,photo4_id,photo4_url,photo5_id,photo5_url,gender,date) VALUES (\"$RecsUserType\",\"$RecsUserDistanceMi\",\"$RecsUserContentHash\",\"$RecsUser_id\",'$RecsUserBio',\"$RecsUserBirthDate\",\"$RecsUserName\",\"$RecsUserPingTime\",\"$RecsUserSNumber\",\"$RecsUserPhoto0id\",\"$RecsUserPhoto0url\",\"$RecsUserPhoto1id\",\"$RecsUserPhoto1url\",\"$RecsUserPhoto2id\",\"$RecsUserPhoto2url\",\"$RecsUserPhoto3id\",\"$RecsUserPhoto3url\",\"$RecsUserPhoto4id\",\"$RecsUserPhoto4url\",\"$RecsUserPhoto5id\",\"$RecsUserPhto5url\",\"$RecsUserGender\",NOW());"
+$MyInsert <<< "INSERT INTO recs (type,distance_mi,content_hash,user_id,bio,birth_date,name,ping_time,s_number,photo0_id,photo0_url,photo1_id,photo1_url,photo2_id,photo2_url,photo3_id,photo3_url,photo4_id,photo4_url,photo5_id,photo5_url,gender,date) VALUES (\"$RecsUserType\",\"$RecsUserDistanceMi\",\"$RecsUserContentHash\",\"$RecsUser_id\",'$RecsUserBio',\"$RecsUserBirthDate\",\"$RecsUserName\",\"$RecsUserPingTime\",\"$RecsUserSNumber\",\"$RecsUserPhoto0id\",\"$RecsUserPhoto0url\",\"$RecsUserPhoto1id\",\"$RecsUserPhoto1url\",\"$RecsUserPhoto2id\",\"$RecsUserPhoto2url\",\"$RecsUserPhoto3id\",\"$RecsUserPhoto3url\",\"$RecsUserPhoto4id\",\"$RecsUserPhoto4url\",\"$RecsUserPhoto5id\",\"$RecsUserPhoto5url\",\"$RecsUserGender\",NOW());"
 done
 }
 Main ()
 {
 RecsCall
 Populate
-Act_array
+#Act_array
 if [[ $((${TimeStarted} - $(date +%s))) -ge 1800 ]] ;then
 	SleepTimerH=$(shuf -i 6-8 -n 1)
 	echo "$(date) Sleeping ${SleepTimerH}" >> tamper.log
