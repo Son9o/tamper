@@ -128,10 +128,11 @@ for ((i=0;i<=${RecsGetAmount};i++))  ;do
 	declare "RecsUser${i}Photo5url=${RecsUserPhoto5url}"
 	declare "RecsUser${i}Gender=${RecsUserGender}"
 
-	LikeUserResponse=$(curl -v --compressed "https://api.gotinder.com/like/${RecsUser_id}?photoId=${RecsUserPhoto0id}&content_hash=${RecsUserContentHash}&s_number=${RecsUserSNumber}" -H "platform: android" -H "User-Agent:  ${UserAgent}" -H "os-version: ${OSversion}" -H "Accept-Language: en" -H "app-version: ${AppVersion}" -H "Host: api.gotinder.com" -H "Connection: Keep-Alive" -H "Accept-Encoding: gzip" -H "X-Auth-Token: ${XAuthToken}" > likeresponse.txt)
+	LikeUserResponse=$(curl --compressed "https://api.gotinder.com/like/${RecsUser_id}?photoId=${RecsUserPhoto0id}&content_hash=${RecsUserContentHash}&s_number=${RecsUserSNumber}" -H "platform: android" -H "User-Agent:  ${UserAgent}" -H "os-version: ${OSversion}" -H "Accept-Language: en" -H "app-version: ${AppVersion}" -H "Host: api.gotinder.com" -H "Connection: Keep-Alive" -H "Accept-Encoding: gzip" -H "X-Auth-Token: ${XAuthToken}")
 	if [ "${LikeUserResponse:0:9}" != '{"match":' ] ;then
-		echo "$(date)Server returned $AuthResponse" >> tamper.log
+		echo "$(date)[Liking] Server returned $AuthResponse" >> tamper.log
 		exit 1
+	fi
 #Echo recs array
 	if [[ ${DEBUG} == 1 ]] ;then
 		echo "dumping converstion per id"
