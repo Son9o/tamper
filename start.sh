@@ -14,7 +14,7 @@ RandomSessionID=$(echo -n "$(date +%s)" | openssl dgst -sha1 -hmac "salted carae
 RetryCounter=0
 TimeStarted=$(date +%s)
 TestCounter=0
-DEBUG=1
+DEBUG=0
 RecsCall () 
 {
 	RecsResponse=$(curl --compressed "https://api.gotinder.com/recs/core?locale=en" -H "platform: android" -H "User-Agent: ${UserAgent}" -H "os-version: ${OSversion}" -H "Accept-Language: en" -H "Content-Type: application/json; charset=UTF-8" -H "app-version: ${AppVersion}" -H "Host: ${HostHeader}" -H "Connection: Keep-Alive" -H "Accept-Encoding: gzip" -H "X-Auth-Token: ${XAuthToken}")
@@ -63,15 +63,19 @@ unset RecsUser_idArray
 #File=$(curl --compressed "https://api.gotinder.com/recs/core?locale=en" -H "platform: android" -H "User-Agent: Tinder Android Version 6.4.1" -H "os-version: 22" -H "Accept-Language: en" -H "app-version: 1935" -H "Host: api.gotinder.com" -H "Connection: Keep-Alive" -H "Accept-Encoding: gzip" -H "X-Auth-Token: ${XAuthToken}")
 Populate ()
 {
+if [[ ${DEBUG} == 1 ]] ;then
+	echo "Starting populate"
+fi
 ##File means requests response  unparsed
 #File=$(cat 5.dat)
 #RecsResponse="${File:0:23}"
 ##Error handling if unknonw response stop to avoid ban, perhaps impelemnt length check
 FileJSON=$(echo "${RecsResponse}" | JSON.load)
 ##Get number of profiles sent in recommendations
+typeset -i i RecsGetAmount #make sure incremnetaor is treated as digit, should speed up the process
 RecsGetAmount=$(echo "${FileJSON}" | cut -d"/" -f3 | sort -nr | head -1)
 ##Disembowel the load and push into DB
-typeset -i i RecsGetAmount #make sure incremnetaor is treated as digit, should speed up the process
+echo ${RecsGetAmount}
 ###Possibly rewrite to cut per user ID first and then look for string match which should speed up grep by not looking through the whole time every time
 for ((i=0;i<=${RecsGetAmount};i++))  ;do
 	RecsUserType=$(echo "$FileJSON" | grep  -w "/results/${i}/type" | cut -d"\"" -f2)
@@ -105,28 +109,28 @@ for ((i=0;i<=${RecsGetAmount};i++))  ;do
 		echo "dumping converstion per id"
 		echo $i
 		echo -e "
-		"$RecsUserType"
-		"$RecsUserDistanceMi" 
-		"$RecsUserContentHash"
-		"$RecsUser_id"
-		"$RecsUserBio" 
-		"$RecsUserBirthDate" 
-		"$RecsUserName"
-		"$RecsUserPingTime" 
-		"$RecsUserSNumber"
-		"$RecsUserPhoto0id" 
-		"$RecsUserPhoto0url" 
-		"$RecsUserPhoto1id" 
-		"$RecsUserPhoto1url" 
-		"$RecsUserPhoto2id"
-		"$RecsUserPhoto2url" 
-		"$RecsUserPhoto3id" 
-		"$RecsUserPhoto3url" 
-		"$RecsUserPhoto4id"
-		"$RecsUserPhoto4url"
-		"$RecsUserPhoto5id" 
-		"$RecsUserPhto5url"
-		"$RecsUserGender""
+"$RecsUserType"
+"$RecsUserDistanceMi" 
+"$RecsUserContentHash"
+"$RecsUser_id"
+"$RecsUserBio" 
+"$RecsUserBirthDate" 
+"$RecsUserName"
+"$RecsUserPingTime" 
+"$RecsUserSNumber"
+"$RecsUserPhoto0id" 
+"$RecsUserPhoto0url" 
+"$RecsUserPhoto1id" 
+"$RecsUserPhoto1url" 
+"$RecsUserPhoto2id"
+"$RecsUserPhoto2url" 
+"$RecsUserPhoto3id" 
+"$RecsUserPhoto3url" 
+"$RecsUserPhoto4id"
+"$RecsUserPhoto4url"
+"$RecsUserPhoto5id" 
+"$RecsUserPhto5url"
+"$RecsUserGender""
 	fi
 ##DB insert
 $MyInsert <<< "INSERT INTO recs (type,distance_mi,content_hash,user_id,bio,birth_date,name,ping_time,s_number,photo0_id,photo0_url,photo1_id,photo1_url,photo2_id,photo2_url,photo3_id,photo3_url,photo4_id,photo4_url,photo5_id,photo5_url,gender,date) VALUES (\"$RecsUserType\",\"$RecsUserDistanceMi\",\"$RecsUserContentHash\",\"$RecsUser_id\",'$RecsUserBio',\"$RecsUserBirthDate\",\"$RecsUserName\",\"$RecsUserPingTime\",\"$RecsUserSNumber\",\"$RecsUserPhoto0id\",\"$RecsUserPhoto0url\",\"$RecsUserPhoto1id\",\"$RecsUserPhoto1url\",\"$RecsUserPhoto2id\",\"$RecsUserPhoto2url\",\"$RecsUserPhoto3id\",\"$RecsUserPhoto3url\",\"$RecsUserPhoto4id\",\"$RecsUserPhoto4url\",\"$RecsUserPhoto5id\",\"$RecsUserPhto5url\",\"$RecsUserGender\",NOW());"
@@ -143,7 +147,7 @@ if [[ $((${TimeStarted} - $(date +%s))) -ge 1800 ]] ;then
 	sleep ${SleepTimerH}h
 	TimeStarted=0
 fi
-Main
+((TestCounter++))
 if [[ ${TestCounter} -ge 2 ]] ;then
 	echo "$(date) reached TestCounter ${TestCounter}" >> tamper.log
 	exit 1
