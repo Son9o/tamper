@@ -23,6 +23,7 @@ RecsCall ()
 		((RetryCounter++))
 		if [[ ${RetryCounter} -ge 3 ]] ;then
 			echo "$(date) Auth Retry counter hit, breaking" >> tamper.log
+			exit 1
 		fi
 		GetXAuthToken	
 		RecsCall
@@ -178,7 +179,7 @@ if [[ $(( $(date +%s) - ${TimeStarted} )) -ge 1800 ]] ;then
 	SleepTimerH=$(shuf -i 6-8 -n 1)
 	echo "$(date) Sleeping ${SleepTimerH}" >> tamper.log
 	sleep ${SleepTimerH}h
-	TimeStarted=0
+	TimeStarted=$(date +%s)
 fi
 ((TestCounter++))
 if [[ ${TestCounter} -ge 100 ]] ;then
