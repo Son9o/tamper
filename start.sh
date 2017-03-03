@@ -1,6 +1,11 @@
 #!/bin/bash
 source /usr/local/lib/bash/json.bash
 source settings.sh
+function trap_error {
+    echo ‘${BASH_COMMAND}‘ ended with error code ${?}, BREAKING | mail -s "tamper stopped" root@localhost
+    exit 1
+}
+trap trap_error ERR
 MyInsert="mysql -h ${MysqlHost} -u ${MysqlUser} -p${MysqlPassword} -N ${MysqlDb}"
 XAuthToken="90635749-0c86-4941-8f07-d01276ab675c"
 XAuthToken=$(cat xauthtoken.recent)
