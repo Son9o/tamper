@@ -130,7 +130,7 @@ for ((i=0;i<=${RecsGetAmount};i++))  ;do
 	declare "RecsUser${i}Gender=${RecsUserGender}"
 
 	LikeUserResponse=$(curl --compressed "https://api.gotinder.com/like/${RecsUser_id}?photoId=${RecsUserPhoto0id}&content_hash=${RecsUserContentHash}&s_number=${RecsUserSNumber}" -H "platform: android" -H "User-Agent:  ${UserAgent}" -H "os-version: ${OSversion}" -H "Accept-Language: en" -H "app-version: ${AppVersion}" -H "Host: api.gotinder.com" -H "Connection: Keep-Alive" -H "Accept-Encoding: gzip" -H "X-Auth-Token: ${XAuthToken}")
-	if [[ ${LikeUserResponse:0:13} = '{"meta":{"status":200},"data":{"api_token":' ]] ;then
+	if [[ ${LikeUserResponse:0:43} = '{"meta":{"status":200},"data":{"api_token":' ]] ;then
 		echo "$(date)[Match]Matched with ${RecsUserName} id: ${RecsUser_id}" >> tamper.log
 		echo "$(date)[Match] Server returned $AuthResponse" >> tamper.log
 	elif [ "${LikeUserResponse:0:15}" != '{"match":false,' ] ;then
