@@ -1,0 +1,81 @@
+Sun Feb 19 22:06:31 GMT 2017 Unknown reponse, exiting
+Sun Feb 19 22:08:03 GMT 2017 401 attempt re-authentication
+Sun Feb 19 22:08:04 GMT 2017 Unknown reponse, exiting
+Sun Feb 26 20:23:57 GMT 2017 401 attempt re-authentication
+Sun Feb 26 20:23:57 GMT 2017 Unknown reponse, exiting
+Sun Feb 26 22:51:42 GMT 2017Server returned 
+Sun Feb 26 22:53:00 GMT 2017[Liking] Server returned 
+Sun Feb 26 23:15:57 GMT 2017 reached TestCounter 2
+Sun Feb 26 23:24:45 GMT 2017 reached TestCounter 2
+Sun Feb 26 23:42:03 GMT 2017 Unknown reponse: , exiting
+Mon Feb 27 00:31:22 GMT 2017 Sleeping 7
+Mon Feb 27 07:31:56 GMT 2017 Sleeping 7
+Mon Feb 27 10:15:44 GMT 2017 Sleeping 7
+Mon Feb 27 17:15:45 GMT 2017 401 attempt re-authentication
+Mon Feb 27 17:37:43 GMT 2017 reached TestCounter 100
+Mon Feb 27 22:27:43 GMT 2017 Sleeping 7
+Tue Feb 28 05:58:00 GMT 2017 Sleeping 6
+Tue Feb 28 12:28:26 GMT 2017 Sleeping 7
+Tue Feb 28 19:28:27 GMT 2017 401 attempt re-authentication
+Tue Feb 28 19:58:35 GMT 2017 Sleeping 6
+Wed Mar  1 02:28:51 GMT 2017 Sleeping 7
+Wed Mar  1 09:58:56 GMT 2017 Sleeping 6
+Wed Mar  1 16:29:31 GMT 2017 Sleeping 7
+Wed Mar  1 23:29:32 GMT 2017 401 attempt re-authentication
+Wed Mar  1 23:54:46 GMT 2017[Liking] Server returned {"meta":{"status":200},"data":{"api_token":"f0e88438-d319-477f-87af-af7ee5fa6913","is_new_user":false}}
+Thu Mar  2 09:58:56 GMT 2017 Sleeping 7
+Thu Mar  2 17:29:16 GMT 2017 Sleeping 8
+Fri Mar  3 01:29:16 GMT 2017 401 attempt re-authentication
+Fri Mar  3 01:41:02 GMT 2017[Liking] Server returned {"meta":{"status":200},"data":{"api_token":"8654229b-040b-49fd-9d21-bf7cfc98a123","is_new_user":false}}
+Fri Mar  3 11:02:16 GMT 2017[Liking] Server returned 
+Sat Mar  4 10:45:55 GMT 2017 401 attempt re-authentication
+Sat Mar  4 11:04:52 GMT 2017[Liking] Server returned {"meta":{"status":200},"data":{"api_token":"f469342a-b0db-4811-ab7e-8c949b595cb1","is_new_user":false}}
+Sat Mar  4 11:38:24 GMT 2017 Sleeping 6
+Sat Mar  4 18:08:55 GMT 2017 Sleeping 6
+Sun Mar  5 00:22:42 GMT 2017[Liking] Server returned 
+Sun Mar  5 01:04:11 GMT 2017 401 attempt re-authentication
+Sun Mar  5 01:34:35 GMT 2017 Sleeping 6
+Sun Mar  5 08:04:41 GMT 2017 Sleeping 7
+Sun Mar  5 15:34:53 GMT 2017 Sleeping 6
+Sun Mar  5 22:05:29 GMT 2017 Sleeping 6
+Mon Mar  6 04:05:30 GMT 2017 401 attempt re-authentication
+Mon Mar  6 04:35:47 GMT 2017 Sleeping 6
+Mon Mar  6 11:05:55 GMT 2017 Sleeping 7
+Mon Mar  6 18:36:15 GMT 2017 Sleeping 6
+Tue Mar  7 00:36:39 GMT 2017[Liking]Server returned: {"meta":{"status":200},"data":{"api_token":"1c65166f-0e2a-4aea-8561-567645782a4e","is_new_user":false}}
+Tue Mar  7 00:36:39 GMT 2017[Liking]When acted with with Name: Eugenia id: 58b49165849d6e870d8478cd
+Tue Mar  7 04:02:30 GMT 2017 Sleeping 7
+Tue Mar  7 08:08:07 GMT 2017 401 attempt re-authentication
+Tue Mar  7 08:40:16 GMT 2017 Sleeping 6
+Tue Mar  7 15:10:35 GMT 2017 Sleeping 6
+Tue Mar  7 21:41:01 GMT 2017 Sleeping 8
+Wed Mar  8 06:11:13 GMT 2017 Sleeping 7
+Wed Mar  8 13:11:14 GMT 2017 401 attempt re-authentication
+Wed Mar  8 13:41:31 GMT 2017 Sleeping 7
+Wed Mar  8 20:41:47 GMT 2017[Liking]Server returned: {"meta":{"status":200},"data":{"api_token":"bf59a348-e975-4ea1-9866-a88b663cc7a1","is_new_user":false}}
+Wed Mar  8 20:41:47 GMT 2017[Liking]When acted with with Name: Maria id: 5892b2c16faf4467637bbbb1
+Wed Mar  8 21:13:13 GMT 2017[Liking]Server returned: 
+Wed Mar  8 21:13:13 GMT 2017[Liking]When acted with with Name: Fernanda id: 543359e05701f5f208842552
+Thu Mar  9 13:25:14 GMT 2017[Liking]Server returned: 
+Thu Mar  9 13:25:14 GMT 2017[Liking]When acted with with Name: Alejandra id: 5643f8ae9f504b256e2140c3
+Sun Mar 12 14:55:46 GMT 2017 401 attempt re-authentication
+Sun Mar 12 14:56:13 GMT 2017[Liking]Server returned: {"meta":{"status":200},"data":{"api_token":"7fb83587-c16f-44d8-a39e-bb2cde91464f","is_new_user":false}}
+Sun Mar 12 14:56:13 GMT 2017[Liking]When acted with with Name: Renata id: 55eb90f61915dc8874649779
+Sun Mar 12 15:16:43 GMT 2017[Liking]Server returned: {"match":{"_id":"56e758073bc7a1485c909e96589e305a8c2b65ca544ee11d","closed":false,"common_friend_count":0,"common_like_count":0,"created_date":"2017-03-12T15:16:43.218Z","dead":false,"last_activity_date":"2017-03-12T15:16:43.218Z","message_count":0,"messages":[],"participants":["589e305a8c2b65ca544ee11d","56e758073bc7a1485c909e96"],"pending":false,"is_super_like":false,"is_boost_match":false,"following":true,"following_moments":true},"likes_remaining":100}
+Sun Mar 12 15:16:43 GMT 2017[Liking]When acted with with Name: Ximeena id: 56e758073bc7a1485c909e96
+Sun Mar 12 15:21:17 GMT 2017[Liking]Server returned: {"match":{"_id":"5756456ea6f8f80912ecc75f589e305a8c2b65ca544ee11d","closed":false,"common_friend_count":0,"common_like_count":0,"created_date":"2017-03-12T15:21:17.753Z","dead":false,"last_activity_date":"2017-03-12T15:21:17.753Z","message_count":0,"messages":[],"participants":["589e305a8c2b65ca544ee11d","5756456ea6f8f80912ecc75f"],"pending":false,"is_super_like":false,"is_boost_match":false,"following":true,"following_moments":true},"likes_remaining":100}
+Sun Mar 12 15:21:17 GMT 2017[Liking]When acted with with Name: Michelle id: 5756456ea6f8f80912ecc75f
+Sun Mar 12 15:25:49 GMT 2017[Liking]Server returned: {"match":{"_id":"5836630966251b130ef26b63589e305a8c2b65ca544ee11d","closed":false,"common_friend_count":0,"common_like_count":0,"created_date":"2017-03-12T15:25:49.408Z","dead":false,"last_activity_date":"2017-03-12T15:25:49.408Z","message_count":0,"messages":[],"participants":["589e305a8c2b65ca544ee11d","5836630966251b130ef26b63"],"pending":false,"is_super_like":false,"is_boost_match":false,"following":true,"following_moments":true},"likes_remaining":100}
+Sun Mar 12 15:25:49 GMT 2017[Liking]When acted with with Name: Ale id: 5836630966251b130ef26b63
+Sun Mar 12 15:27:44 GMT 2017[Liking]Server returned: {"match":{"_id":"556fc71561328ba011eeba6f589e305a8c2b65ca544ee11d","closed":false,"common_friend_count":0,"common_like_count":0,"created_date":"2017-03-12T15:27:44.722Z","dead":false,"last_activity_date":"2017-03-12T15:27:44.722Z","message_count":0,"messages":[],"participants":["589e305a8c2b65ca544ee11d","556fc71561328ba011eeba6f"],"pending":false,"is_super_like":false,"is_boost_match":false,"following":true,"following_moments":true},"likes_remaining":100}
+Sun Mar 12 15:27:44 GMT 2017[Liking]When acted with with Name: Diana id: 556fc71561328ba011eeba6f
+Sun Mar 12 15:35:23 GMT 2017[Match]Matched with: Amalia id: 53545048865995962a002c3d
+Sun Mar 12 15:35:23 GMT 2017[Match]Server returned: {"match":{"_id":"53545048865995962a002c3d589e305a8c2b65ca544ee11d","closed":false,"common_friend_count":0,"common_like_count":0,"created_date":"2017-03-12T15:35:23.309Z","dead":false,"last_activity_date":"2017-03-12T15:35:23.309Z","message_count":0,"messages":[],"participants":["589e305a8c2b65ca544ee11d","53545048865995962a002c3d"],"pending":false,"is_super_like":false,"is_boost_match":false,"following":true,"following_moments":true},"likes_remaining":100}
+Sun Mar 12 15:36:10 GMT 2017[Match]Matched with: Diana id: 58abbf72e36778ea2ff6167b
+Sun Mar 12 15:36:10 GMT 2017[Match]Server returned: {"match":{"_id":"589e305a8c2b65ca544ee11d58abbf72e36778ea2ff6167b","closed":false,"common_friend_count":0,"common_like_count":0,"created_date":"2017-03-12T15:36:10.489Z","dead":false,"last_activity_date":"2017-03-12T15:36:10.489Z","message_count":0,"messages":[],"participants":["589e305a8c2b65ca544ee11d","58abbf72e36778ea2ff6167b"],"pending":false,"is_super_like":false,"is_boost_match":false,"following":true,"following_moments":true},"likes_remaining":100}
+Wed Apr 19 20:01:32 BST 2017 401 attempt re-authentication
+Wed Apr 19 20:01:33 BST 2017Server returned {"meta":{"status":401},"error":{"code":40110}}
+Wed Apr 19 20:01:36 BST 2017 401 attempt re-authentication
+Wed Apr 19 20:01:36 BST 2017Server returned {"meta":{"status":401},"error":{"code":40110}}
+Wed Apr 19 20:03:32 BST 2017 401 attempt re-authentication
+Wed Apr 19 20:03:33 BST 2017Server returned {"meta":{"status":401},"error":{"code":40110}}

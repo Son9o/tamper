@@ -40,7 +40,7 @@ RecsCall ()
 
 GetXAuthToken ()
 {
-	AuthResponse=$(curl --compressed -X POST "https://api.gotinder.com/v2/auth" -H "app-session: $(echo -n "$(date +%s)" | openssl dgst -sha1 -hmac "salted caraeml"  | awk '{print $2}')" -H "User-Agent: ${UserAgent}" -H "os-version: ${OSversion}" -H "app-version: ${AppVersion}" -H "platform: android" -H "Accept-Language: en" -H "Content-Type: application/json; charset=UTF-8" -H "Host: ${HostHeader}" -H "Connection: Keep-Alive" -H "Accept-Encoding: gzip" --data '{"token":"EAAGm0PX4ZCpsBACSSPW3Paq8NPsRk3FUqgjGPnmJ20Bjxl4PD1x60hyAw6CSTRCiX4Epn5QBe0j0kdX2iwjOEPogfjzeTYHBAZBkCM8qqTBSepXVpad19CDMNnFjcBzhMLya6hMc5wuh0H3WRkbZB5RoC9sx9AWrVbodYKPoZAkADiaaMA9MsBnuupWZA0I7KEPZAPMGxtqFiLQK3e2oNC","id":"734262360"}')
+	AuthResponse=$(curl --compressed -X POST "https://api.gotinder.com/v2/auth" -H "app-session: $(echo -n "$(date +%s)" | openssl dgst -sha1 -hmac "salted caraeml"  | awk '{print $2}')" -H "User-Agent: ${UserAgent}" -H "os-version: ${OSversion}" -H "app-version: ${AppVersion}" -H "platform: android" -H "Accept-Language: en" -H "Content-Type: application/json; charset=UTF-8" -H "Host: ${HostHeader}" -H "Connection: Keep-Alive" -H "Accept-Encoding: gzip" --data '{"token":"${FBToken}","id":"${FBID}"}')
 	if [ "${AuthResponse:0:22}" != '{"meta":{"status":200}' ] ;then
 		echo "$(date)Server returned $AuthResponse" >> tamper.log
 		exit 1
@@ -110,29 +110,29 @@ for ((i=0;i<=${RecsGetAmount};i++))  ;do
 #	RecsUserPhotourl=$(echo "$FileJSON" | grep  -w "/results/${i}/user/photos/6/url" | cut -d"\"" -f2)	
 	RecsUserGender=$(echo "$FileJSON" | grep -w "/results/${i}/user/gender" |  awk '{print $2}')
 
-	##Redeclaring variables
-	declare "RecsUser${i}Type=${RecsUserType}"
-	declare "RecsUser${i}DistanceMi=${RecsUserDistanceMi}"
-	declare "RecsUser${i}ContentHash=${RecsUserContentHash}"
-	declare "RecsUser${i}_id=${RecsUser_id}"
-	declare "RecsUser${i}Bio=${RecsUserBio}"
-	declare "RecsUser${i}BirthDate=${RecsUserBirthDate}"
-	declare "RecsUser${i}Name=${RecsUserName}"
-	declare "RecsUser${i}PingTime=${RecsUserPingTime}"
-	declare "RecsUser${i}SNumber=${RecsUserSNumber}"
-	declare "RecsUser${i}Photo0id=${RecsUserPhoto0id}"
-	declare "RecsUser${i}Photo0url=${RecsUserPhoto0url}"
-	declare "RecsUser${i}Photo1id=${RecsUserPhoto1id}"
-	declare "RecsUser${i}Photo1url=${RecsUserPhoto1url}"
-	declare "RecsUser${i}Photo2id=${RecsUserPhoto2id}"
-	declare "RecsUser${i}Photo2url=${RecsUserPhoto2url}"
-	declare "RecsUser${i}Photo3id=${RecsUserPhoto3id}"
-	declare "RecsUser${i}Photo3url=${RecsUserPhoto3url}"
-	declare "RecsUser${i}Photo4id=${RecsUserPhoto4id}"
-	declare "RecsUser${i}Photo4url=${RecsUserPhoto4url}"
-	declare "RecsUser${i}Photo5id=${RecsUserPhoto5id}"
-	declare "RecsUser${i}Photo5url=${RecsUserPhoto5url}"
-	declare "RecsUser${i}Gender=${RecsUserGender}"
+#	##Redeclaring variables
+#	declare "RecsUser${i}Type=${RecsUserType}"
+#	declare "RecsUser${i}DistanceMi=${RecsUserDistanceMi}"
+#	declare "RecsUser${i}ContentHash=${RecsUserContentHash}"
+#	declare "RecsUser${i}_id=${RecsUser_id}"
+#	declare "RecsUser${i}Bio=${RecsUserBio}"
+#	declare "RecsUser${i}BirthDate=${RecsUserBirthDate}"
+#	declare "RecsUser${i}Name=${RecsUserName}"
+#	declare "RecsUser${i}PingTime=${RecsUserPingTime}"
+#	declare "RecsUser${i}SNumber=${RecsUserSNumber}"
+#	declare "RecsUser${i}Photo0id=${RecsUserPhoto0id}"
+#	declare "RecsUser${i}Photo0url=${RecsUserPhoto0url}"
+#	declare "RecsUser${i}Photo1id=${RecsUserPhoto1id}"
+#	declare "RecsUser${i}Photo1url=${RecsUserPhoto1url}"
+#	declare "RecsUser${i}Photo2id=${RecsUserPhoto2id}"
+#	declare "RecsUser${i}Photo2url=${RecsUserPhoto2url}"
+#	declare "RecsUser${i}Photo3id=${RecsUserPhoto3id}"
+#	declare "RecsUser${i}Photo3url=${RecsUserPhoto3url}"
+#	declare "RecsUser${i}Photo4id=${RecsUserPhoto4id}"
+#	declare "RecsUser${i}Photo4url=${RecsUserPhoto4url}"
+#	declare "RecsUser${i}Photo5id=${RecsUserPhoto5id}"
+#	declare "RecsUser${i}Photo5url=${RecsUserPhoto5url}"
+#	declare "RecsUser${i}Gender=${RecsUserGender}"
 
 	LikeUserResponse=$(curl --compressed "https://api.gotinder.com/like/${RecsUser_id}?photoId=${RecsUserPhoto0id}&content_hash=${RecsUserContentHash}&s_number=${RecsUserSNumber}" -H "platform: android" -H "User-Agent:  ${UserAgent}" -H "os-version: ${OSversion}" -H "Accept-Language: en" -H "app-version: ${AppVersion}" -H "Host: api.gotinder.com" -H "Connection: Keep-Alive" -H "Accept-Encoding: gzip" -H "X-Auth-Token: ${XAuthToken}")
 	if [[ "${LikeUserResponse:0:43}" == '{"meta":{"status":200},"data":{"api_token":' ]] ;then
